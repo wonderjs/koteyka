@@ -1,4 +1,3 @@
-// gulpfile.js
 import gulp from 'gulp';
 import * as dartSass from 'sass';
 import gulpSass from 'gulp-sass';
@@ -11,15 +10,19 @@ import browserSync from 'browser-sync';
 import browserslist from 'browserslist';
 import browserslistToEsbuild from 'browserslist-to-esbuild';
 import esbuild from 'gulp-esbuild';
+import sharp from 'sharp';
+import through2 from 'through2';
+import gulpNewer from 'gulp-newer';
 
 const bs = browserSync.create();
 const sass = gulpSass(dartSass);
 
-// --- режимы
+const rasterSrc = 'src/img/*.{jpg,jpeg,png}';
+const rasterDest = 'dist/img';
+
 const isProd = process.env.NODE_ENV === 'production';
 const isDev = !isProd;
 
-// --- пути (если у тебя другая структура — можно поменять только здесь)
 const paths = {
     src: 'src',
     dist: 'dist',
@@ -38,9 +41,8 @@ const paths = {
         dest: 'dist/js',
     },
     assets: {
-        // сюда можно добавить любые статические файлы
         src: [
-            'src/img/**/*',
+            'src/img/*.svg',
             'src/fonts/**/*',
             'src/favicons/**/*',
             'src/site.webmanifest',
@@ -51,19 +53,16 @@ const paths = {
     }
 }
 
-// --- очистка
 export function clean () {
     return deleteAsync([paths.dist]);
 }
 
-// --- HTML: просто копируем
 export function html () {
     return gulp.src(paths.html.src)
         .pipe(gulp.dest(paths.html.dest))
         .pipe(bs.stream());
 }
 
-// --- STYLES: SCSS → PostCSS
 export function styles () {
     const plugins = [autoprefixer()];
     if (isProd) plugins.push(cssnano());
@@ -74,6 +73,24 @@ export function styles () {
         .pipe(postcss(plugins))
         .pipe(gulp.dest(paths.styles.dest, { sourcemaps: isDev }))
         .pipe(bs.stream());
+}
+
+export function imagesRaster () {
+  return gulp.src(rasterSrc)
+    .pipe(gulpNewer(rasterDest))
+    .pipe(through2.obj(async (file, _, cb) => {
+      try {
+        file.contents = await sharp(file.path)
+          .toColorspace('srgb')
+          .jpeg({ quality: 80, progressive: true, mozjpeg: true })
+          .toBuffer();
+        file.extname = '.jpg';
+        cb(null, file);
+      } catch {
+        cb();
+      }
+    }))
+    .pipe(gulp.dest(rasterDest));
 }
 
 // --- SCRIPTS: esbuild bundle
@@ -114,6 +131,7 @@ export function serve (done) {
 export function watcher () {
     gulp.watch(paths.html.src, html);
     gulp.watch(paths.styles.watch, styles);
+    gulp.watch('src/img/*.{jpg,jpeg,png}', imagesRaster);
     gulp.watch(paths.scripts.watch, scripts);
     gulp.watch(paths.assets.src, assets);
 }
@@ -129,11 +147,13 @@ export const build = gulp.series(
     setProd,
     clean,
     gulp.parallel(html, styles, scripts, assets),
+    imagesRaster,
 )
 
 export const dev = gulp.series(
     clean,
     gulp.parallel(html, styles, scripts, assets),
+    imagesRaster,
     serve,
     watcher,
 )
