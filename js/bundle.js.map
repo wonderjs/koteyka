@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/js/index.js"],
+  "sourcesContent": ["document.addEventListener('DOMContentLoaded', () => {\n\n\n})\n"],
+  "mappings": ";;AAAA,WAAS,iBAAiB,oBAAoB,MAAM;AAAA,EAGpD,CAAC;",
+  "names": []
+}
