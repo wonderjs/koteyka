@@ -1,0 +1,45 @@
+{
+  "name": "koteyka",
+  "version": "1.0.0",
+  "description": "Сайт гостиницы для котов и кошек «Котейка»",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "gulp",
+    "build": "gulp build",
+    "lint": "eslint . --ext .js",
+    "deploy": "npm run build && gh-pages -d dist"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "not dead",
+    "not op_mini all",
+    "not and_uc > 0",
+    "not < 0.2%"
+  ],
+  "engines": {
+    "node": "^18.18 || ^20.9 || ^22.0"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "browser-sync": "^3.0.4",
+    "browserslist": "^4.25.4",
+    "browserslist-to-esbuild": "^2.1.1",
+    "cssnano": "^7.0.6",
+    "del": "^8.0.0",
+    "eslint": "^8.57.1",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.6.0",
+    "gh-pages": "^6.3.0",
+    "gulp": "^5.0.0",
+    "gulp-esbuild": "^0.14.1",
+    "gulp-postcss": "^10.0.0",
+    "gulp-sass": "^6.0.1",
+    "gulp-sass-glob": "^1.1.0",
+    "postcss": "^8.5.3",
+    "sass": "^1.86.2"
+  }
+}
