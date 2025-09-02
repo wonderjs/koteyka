@@ -1,1 +1,12 @@
+@use 'base/fonts';
+
 @use 'blocks/header';
+
+body {
+  font-family: 'Lato', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+}
+
+h1 {
+  font-weight: 700;
+}
