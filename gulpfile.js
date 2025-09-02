@@ -82,17 +82,41 @@ export function optimizeRaster() {
     .pipe(gulpNewer(rasterDest))
     .pipe(through2.obj(async (file, _, cb) => {
       try {
-        file.contents = await sharp(file.path)
-          .toColorspace('srgb')
-          .jpeg({quality: 80, progressive: true, mozjpeg: true})
-          .toBuffer();
-        file.extname = '.jpg';
-        cb(null, file);
+        const ext = extname(file.path).toLowerCase();
+
+        if (ext === '.jpg' || ext === '.jpeg') {
+          file.contents = await sharp(file.path)
+            .toColorspace('srgb')
+            .jpeg({ quality: 80, progressive: true, mozjpeg: true })
+            .toBuffer()
+          // оставляем .jpg / .jpeg как есть
+        } else if (ext === '.png') {
+          file.contents = await sharp(file.path)
+            .png({ compressionLevel: 9, adaptiveFiltering: true })
+            .toBuffer()
+          // оставляем .png
+        }
+        cb(null, file)
       } catch {
-        cb();
+        cb() // пропускаем неподдерживаемые
       }
     }))
-    .pipe(gulp.dest(rasterDest));
+    .pipe(gulp.dest(rasterDest))
+}
+
+export function createWebp () {
+  return gulp.src(rasterSrc)
+    .pipe(through2.obj(async (file, _, cb) => {
+      try {
+        const out = await sharp(file.path).webp({ quality: 80 }).toBuffer()
+        file.contents = out
+        file.path = file.path.replace(/\.(jpe?g|png)$/i, '.webp')
+        cb(null, file)
+      } catch {
+        cb() // пропускаем
+      }
+    }))
+    .pipe(gulp.dest(rasterDest))
 }
 
 export function optimizeVector() {
@@ -155,7 +179,7 @@ export function serve(done) {
 export function watcher() {
   gulp.watch(paths.html.src, html);
   gulp.watch(paths.styles.watch, styles);
-  gulp.watch('src/img/*.{jpg,jpeg,png}', optimizeRaster);
+  gulp.watch('src/img/*.{jpg,jpeg,png}', optimizeRaster, createWebp);
   gulp.watch('src/img/*.svg', optimizeVector)
   gulp.watch(paths.scripts.watch, scripts);
   gulp.watch(paths.assets.src, assets);
@@ -173,6 +197,7 @@ export const build = gulp.series(
   clean,
   gulp.parallel(html, styles, scripts, assets),
   optimizeRaster,
+  createWebp,
   optimizeVector,
 )
 
@@ -180,6 +205,7 @@ export const dev = gulp.series(
   clean,
   gulp.parallel(html, styles, scripts, assets),
   optimizeRaster,
+  createWebp,
   optimizeVector,
   serve,
   watcher,
