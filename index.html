@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Главная страница сайта гостиницы для котов и кошек «Котейка»</title>
-
+  <title>Гостиница для котов и кошек «Котейка»</title>
+  <meta name="description" content="«Котейка» — уютная гостиница для котов и кошек: безопасные номера, круглосуточный уход, фотоотчёты и любовь к каждому хвостику." />
   <link rel="apple-touch-icon" href="./favicons/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="16x16" href="./favicons/favicon-16x16.png">
   <link rel="icon" type="image/png" sizes="32x32" href="./favicons/favicon-32x32.png">
@@ -13,13 +13,17 @@
   <link rel="icon" type="image/png" sizes="512x512" href="./favicons/android-chrome-512x512.png">
   <link rel="icon" type="image/x-icon" href="./favicon.ico">
   <link rel="manifest" href="./site.webmanifest">
+  <link rel="preload" href="./fonts/Lato-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/Lato-Medium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/Lato-Semibold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/Lato-Bold.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
 <header class="main-header">
   <nav class="main-nav">
-    <a class="logo">
-      <img src="./img/logo.svg" width="63" height="52" alt="Логотип сайта гостиницы котов и кошек Котейка">
+    <a href="/" class="logo">
+      <img src="./img/logo.svg" width="63" height="52" alt="Логотип гостиницы котов и кошек Котейка">
     </a>
     <ul class="site-navigation">
       <li class="site-navigation-item">
@@ -44,7 +48,10 @@
     <p>Санкт-Петербург</p>
     <p>Уютная гостиница для котов и кошек</p>
     <a href="catalog.html">Забронировать</a>
-    <img src="./img/photo-promo-1.jpg" width="1366" height="504" alt="Уютная гостиница для котов и кошек">
+    <picture>
+      <source srcset="./img/photo-promo-1.webp" type="image/webp">
+      <img src="./img/photo-promo-1.jpg" width="1366" height="504" alt="Уютная гостиница для котов и кошек">
+    </picture>
   </section>
   <section class="features">
     <h2>Почему мы?</h2>
@@ -82,7 +89,10 @@
     <h2>Другие номера</h2>
     <section class="room-reservation-description">
       <h3>Эконом плюс</h3>
-      <img src="./img/photo-order-1.jpg" width="600" height="404" alt="Номер эконом плюс">
+      <picture>
+        <source srcset="./img/photo-order-1.webp" type="image/webp">
+        <img src="./img/photo-order-1.jpg" width="600" height="404" alt="Номер эконом плюс">
+      </picture>
       <dl class="description-list">
         <dt>Площадь -</dt>
         <dd>0,90 м<sup>2</sup></dd>
@@ -174,11 +184,16 @@
         </ul>
       </dd>
     </dl>
-    <img src="./img/map.jpg" width="798" height="580" alt="Карта">
+    <picture>
+      <source srcset="./img/map.webp" type="image/webp">
+      <img src="./img/map.jpg" width="798" height="580" alt="Карта">
+    </picture>
   </section>
   <section class="footer-nav">
     <h2 class="visually-hidden">Дополнительная навигация по сайту</h2>
-    <a><img src="./img/logo.svg" width="63" height="52" alt="Логотип сайта гостиницы котов и кошек Котейка"></a>
+    <a href="/" >
+      <img src="./img/logo.svg" width="63" height="52" alt="Логотип гостиницы котов и кошек Котейка">
+    </a>
     <ul class="footer-site-navigation">
       <li>
         <a href="#">Почему мы?</a>
